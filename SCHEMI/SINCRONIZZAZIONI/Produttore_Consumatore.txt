@@ -1,0 +1,31 @@
+                     |CONDIZIONI|
+1) Un produttore non deve sovrascrivere un buffer pieno
+2) Un consumatore non deve consumare un buffer vuoto
+3) I produttori ed i consumatori devono accedere al buffer in maniera mutualmente esclusiva
+(A volte viene imposta anche la seguente :)
+4) L'informazione dev'essere consumata nell'ordine in cui viene prodotta (FIFO)
+--------------------------------------------------------------------------------
+                    |SCHEMA|
+                    
+Produttore(){
+    while(1){
+      wait(buff_empty)
+      lock(mutex)
+      buffer[prod_idx] = elem
+      prod_idx += 1
+      unlock(mutex)
+      signal(buff_full)
+   }
+}
+
+Consumatore(){
+    while(1){
+      wait(buff_full)
+      lock(mutex)
+      buffer[cons_idx] = 0
+      cons_idx -= 1
+      unlock(mutex)
+      signal(buff_empty)
+   }
+}
+==================================================================================
