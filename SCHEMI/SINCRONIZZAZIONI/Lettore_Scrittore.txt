@@ -1,0 +1,40 @@
+                             |CONDIZIONI|
+1) Molti lettori possono effettuare la lettura in maniera concorrente
+2) La lettura è proibita quando uno scrittore sta eseguendo una scrittura
+3) Solo uno scrittore per volta può eseguire la scrittura
+(La seguente viene implementata per rendere il problema "con priorità ai lettori")
+4) Un lettore ha priorità non prelazionabile agli scrittori 
+(I lettori hanno priorità maggiore, accedendo quindi prima di uno scrittore alla mem condivisa, ma non possono prelazionare uno scrittore in esecuzione)
+---------------------------------------------------------------------------------------------------------------------------------------------
+                              |SCHEMA|
+
+Lettore(){
+  while(1){
+    if(write_run > 0){
+      wait(lettura)
+    }
+    signal(lettura)
+    if(read_run == 0){
+      if(write_ready > 0){
+        signal(scrittura)
+      }
+    }
+  }
+}
+  
+Scrittore(){
+   while(1){
+    if(read_run > 0 OR write_run > 0){
+       wait(scrittura)
+    }
+    lock(mutex)
+    Scrivi()
+    unlock(mutex)
+    signal(scrittura)
+    if(read_ready > 0){
+      signal(lettura)
+    }elseif(write_ready > 0){
+      signal(scrittura)
+    }
+  }
+}
