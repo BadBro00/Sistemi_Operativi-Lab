@@ -1,0 +1,35 @@
+In questo schema, solo un processo può modificare i dati condivisi, quindi non si necessita di alcuna CS, ed è un problema di SEGNALAZIONE
+Lo schema si dispone in questo modo:
+    -Il processo attende un evento
+    -Segnala che sta modificando i dati
+    -Modifica le variabili
+    -Segnala l'uscita dalla CS
+    -Ripeti
+------------------------------------------------------------------------------------------
+
+Barbiere(){
+  while(1){
+    wait(Clienti)
+    wait(sem_CS)
+    Clienti_attesa -= 1
+    signal(poltrona)
+    signal(sem_CS)
+    Taglia_Capelli()
+  }
+}
+
+Cliente(){
+   while(1){
+    wait(sem_CS)
+    if(Clienti_attesa < sedie){
+      Clienti_attesa += 1
+      signal(clienti)
+      signal(sem_CS)
+      wait(poltrona)
+      Attendi_Taglio()
+   }else{
+      signal(sem_CS)
+      Esci()
+   }
+ }
+} 
