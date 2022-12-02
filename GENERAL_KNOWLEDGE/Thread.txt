@@ -1,0 +1,15 @@
+Gli esercizi sui thread trovano la loro semplicita' nel fatto che in ogni esercizio c'e' sempre la stessa struttura:
+    
+    1) pthread_create()
+    2) pthread_join()
+    3) ROUTINE
+    4) Stampa dati
+    
+Come riportato negli Schemi e nei Template, la struttura degli esercizi sui thread e' molto costante e ripetuta, per cui bisogna imparare bene solamente le function
+  principali, i valori di ritorno e la gestione degli errori possibili.
+  
+Inoltre, solitamente nell'esercizio sui thread vi sara' una matrice (o due), su cui operare, per cui e' fortemente consigliata una conoscenza sulle proprieta' delle
+  matrici e i metodi di calcolo principali (somma, prodotto,..)
+  
+Verra' valutata soprattutto la logica dell'esercizio, per cui e' consigliato avere ben in mente lo schema di istruzioni da far eseguire ai thread, 
+  piuttosto che concentrarsi sullo svolgere bene l'esercizio, e chiaramente non e' necessaria la perfetta compilazione e run del codice.
