@@ -1,0 +1,18 @@
+L'esercizio sulle directory e' uno dei piu' "problematici", in quanto si fa utilizzo di una struct piena di campi i cui nomi spesso sono difficili da tenere a mente.
+
+La struct e' quella della stat, e comprende parametri come:
+    st_mode (i "permessi" del file)
+    st_size (la dimensione)
+    st_uid/st_gid (l'User ID e il Group ID del proprietario)
+    
+Inoltre, contiene anche tre importanti campi (struct):
+     struct timespec st_atim;  [ Access TIMe ]
+     struct timespec st_mtim;  [ Modify TIMe ]
+     struct timespec st_ctim;  [ status Change TIMe]
+     
+Grazie alle ultime tre, tramite un semplice casting [ ctime(&st_...) ], possiamo recuperare dalla struct stat le informazioni delle date (comprese di hh-mm-ss) di:
+  Accesso
+  Modifica
+  Cambiamenti di stato
+
+Una volta tenuti a mente questi consigli, l'esercizio sulle directory si basa semplicemente sul ricordarsi gli step, molto ripetitivi, illustrati nel template.
