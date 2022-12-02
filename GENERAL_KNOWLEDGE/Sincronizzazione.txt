@@ -1,0 +1,18 @@
+Per risolvere gli esercizi di Sincronizzazione, bisogna aver chiari in mente le differenze fra:
+    1) Problemi di SEGNALAZIONE
+    2) Problemi di Mutua Esclusione
+
+Inoltre, bisogna comprendere che la mutua esclusione va applicata solo in caso:
+      Write_Set(P1) - Write_Set(P2) != NULL [Ovvero, se entrambi i processi modificano dati condivisi].
+
+Se infatti questi due set di istruzioni vanno a modificare gli stessi dati, si rischiano RACE CONDITION, e quindi dati inconsistenti.
+La mutua esclusione permette di rendere le operazioni sui dati NON PRELAZIONABILI e ATOMICHE (mediante wait/signal - lock/unlock)
+      
+Se invece non vi sono modifiche dei dati, si puo' evitare la mutua esclusione, e magari preferire un approccio di Segnalazione.
+
+Un altro esempio di Segnalazione e' quello in cui solo UN processo puo' modificare i dati condivisi [Barbiere], per cui serve solo segnalare la disponibilita' dei dati.
+In questo caso, il processo che ha accesso ai dati, ha l'esclusiva sulla modifica, e segnala agli altri processi quando i dati stessi sono disponibili, in modo che 
+  possano essere usati per i loro scopi. [La poltrona del Barbiere]
+
+Dunque, per riuscire a svolgere correttamente un esercizio di Sincronizzazione, oltre a conoscere i vari problemi classici e la differenza fra Segnalazione e M.E., 
+  bisogna anche avere un'idea ben chiara di cio' che si sta cercando di fare, ottimizzando la ripetizione delle istruzioni e il controllo sui vari valori condivisi.
