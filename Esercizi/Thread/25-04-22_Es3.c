@@ -22,7 +22,7 @@ struct mypars{
    int **mat;
    int n;
    int idx;
-   pthread_t mutex;
+   pthread_mutex_t mutex;
    int *part_sums;
 }sh;
 
@@ -61,10 +61,10 @@ void* print_sum(void* args){
 
 void mat_init(){
   sh.mat = malloc(sh.n*sizeof(int*));
-  for(int i=0;i<n;i++)
+  for(int i=0;i<sh.n;i++)
     sh.mat[i] = malloc(sh.n*sizeof(int));
-  for(int i=0;i<n;i++)
-    for(int j=0;j<n;j++)
+  for(int i=0;i<sh.n;i++)
+    for(int j=0;j<sh.n;j++)
       sh.mat[i][j] = rand()%256;
 }
 
@@ -84,12 +84,14 @@ int main(int argc,char *argv[]){
     exit(-1);
   }
   sh.n = atoi(argv[1]);
+  sh.part_sum = malloc(sh.n*sizeof(int));
   mat_init();
   prt_mat();
   pthread_t tids[sh.n];
-  for(int i=0;i<sh.n;i++)
+  for(int i=0;i<sh.n;i++){
      sh.idx = i;
      pthread_create(&tids[i],NULL,do_ops,NULL);
+  }
   for(int i=0;i<sh.n;i++)
      pthread_join(tids[i],NULL);
   pthread_t last;
