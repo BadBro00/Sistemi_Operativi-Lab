@@ -17,26 +17,61 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
-int **mat;
-int n;
 
+struct mypars{
+   int **mat;
+   int n;
+   int idx;
+   pthread_t mutex;
+   int *part_sums;
+}sh;
+
+   
 void* do_ops(void* args){
-  
+   pthread_mutex_lock(&sh.mutex);
+   if(sh.idx%2){
+      for(int i=0;i<sh.n;i++){
+         if(i%2)
+            sh.part_sums[sh.idx] += sh.mat[sh.idx][i];
+      }
+   }else{
+      for(int i=0;i<sh.n;i++){
+         if(!i%2)
+            sh.part_sums[sh.idx] += sh.mat[sh.idx][i];
+      }
+   }
+   pthread_mutex_unlock(&sh.mutex);
+   pthread_exit(NULL);
+}
+
+void* print_sum(void* args){
+   for(int i=0;i<sh.n;i++)
+      printf("part_sums[%d] = %d\n",i,sh.part_sums[i]); 
+   int sum = 0;
+   for(int i=0;i<sh.n;i++){
+      sum += sh.part_sums[i];
+   }
+   int min = sh.part_sums[0];
+   for(int i=0;i<sh.n;i++)
+      if(sh.part_sums[i] < min)
+         min = sh.part_sums[i];
+   printf("La somma totale è: %d\nIl minimo delle somme parziali è: %d\n",sum,min);
+   pthread_exit(NULL);
 }
 
 void mat_init(){
-  mat = malloc(n*sizeof(int*));
+  sh.mat = malloc(sh.n*sizeof(int*));
   for(int i=0;i<n;i++)
-    mat[i] = malloc(n*sizeof(int));
+    sh.mat[i] = malloc(sh.n*sizeof(int));
   for(int i=0;i<n;i++)
     for(int j=0;j<n;j++)
-      mat[i][j] = rand()%256;
+      sh.mat[i][j] = rand()%256;
 }
 
 void prt_mat(){
-  for(int i=0;i<n;i++){
-    for(int j=0;j<n;j++){
-      printf(" %d ",mat[i][j]);
+  for(int i=0;i<sh.n;i++){
+    for(int j=0;j<sh.n;j++){
+      printf(" %d ",sh.mat[i][j]);
     }
     printf("\n");
   }    
@@ -48,8 +83,15 @@ int main(int argc,char *argv[]){
     fprintf(stderr,"Uso: ./a.out <int>\n");
     exit(-1);
   }
-  n = atoi(argv[1]);
+  sh.n = atoi(argv[1]);
   mat_init();
   prt_mat();
+  pthread_t tids[sh.n];
+  for(int i=0;i<sh.n;i++)
+     sh.idx = i;
+     pthread_create(&tids[i],NULL,do_ops,NULL);
+  for(int i=0;i<sh.n;i++)
+     pthread_join(tids[i],NULL);
+  
   return 0;
 }
