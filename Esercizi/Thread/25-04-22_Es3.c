@@ -29,17 +29,20 @@ struct mypars{
    
 void* do_ops(void* args){
    pthread_mutex_lock(&sh.mutex);
-   if(sh.idx%2){
+   int idx = sh.idx-1;
+   //printf("Thread: %ld\nIl mio idx è: %d\n",pthread_self(),sh.idx);
+   if(idx%2){
       for(int i=0;i<sh.n;i++){
          if(i%2)
-            sh.part_sums[sh.idx] += sh.mat[sh.idx][i];
+            sh.part_sums[idx] += sh.mat[idx][i];
       }
    }else{
       for(int i=0;i<sh.n;i++){
          if(!i%2)
-            sh.part_sums[sh.idx] += sh.mat[sh.idx][i];
+            sh.part_sums[idx] += sh.mat[idx][i];
       }
    }
+   sh.idx++;
    pthread_mutex_unlock(&sh.mutex);
    pthread_exit(NULL);
 }
@@ -84,7 +87,7 @@ int main(int argc,char *argv[]){
     exit(-1);
   }
   sh.n = atoi(argv[1]);
-  sh.part_sum = malloc(sh.n*sizeof(int));
+  sh.part_sums = malloc(sh.n*sizeof(int));
   mat_init();
   prt_mat();
   pthread_t tids[sh.n];
