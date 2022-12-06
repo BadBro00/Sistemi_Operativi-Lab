@@ -1,0 +1,51 @@
+In un sistema sono attivi N processi. Ogni processo si attribuisce un ID univoco nel sistema, con 0<=ID<N. 
+Una volta che tutti i processi sono dotati di ID, si dividono in due gruppi: quelli con ID pari e quelli con ID dispari.
+All’interno di ogni gruppo si elegge come leader il processo con PID (assegnato dal SO) minore. 
+Il primo dei due leader che accede all’area di memoria condivisa M, ne stampa il contenuto a video.
+Il procedimento viene ripetuto a partire dall’assegnazione degli ID.
+------------------------------------------------------------------------------------------------------------------------
+VARIABILI:
+
+N_Proc : const int = N
+
+ID_Pari : array = {...}
+ID_Disp : array = {...}
+pids : array[N_Proc] = {...}
+
+proc_ID : int = ...
+pari_idx : int = 0
+disp_idx : int = 0
+min_pari : int = 0
+min_disp : int = 0
+
+pid_Grup_Pari : pid = ...
+pid_Grup_Disp : pid = ...
+
+choosing_id : semaforo = 1
+mutex : mutex = 1
+-------------------------------------------------------------------------------------------------------------------------
+PROCESSI:
+
+P(){
+  while(1){
+    mypid := getpid()
+    lock(mutex)
+    if(mypid%2)
+      ID_disp[disp_idx] := mypid
+      disp_idx++
+    else  
+      ID_pari[pari_idx] := mypid
+      pari_idx++
+    unlock(mutex)
+    proc_ID := rand()%N
+    pid_Grup_Pari := Find_Min_Pid(ID_Pari)
+    pid_Grup_Disp := Find_Min_Pid(ID_Disp)
+    if pid_Grup_Pari == mypid OR pid_Grup_Disp == mypid
+      lock(mutex)
+      //ACCEDI AREA MEMORIA M
+      Stampa_a_Video()
+      unlock(mutex)
+  }
+}
+  
+  
