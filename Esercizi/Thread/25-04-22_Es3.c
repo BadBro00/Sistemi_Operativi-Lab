@@ -92,6 +92,8 @@ int main(int argc,char *argv[]){
      pthread_create(&tids[i],NULL,do_ops,NULL);
   for(int i=0;i<sh.n;i++)
      pthread_join(tids[i],NULL);
-  
+  pthread_t last;
+  pthread_create(&last,NULL,print_sum,NULL);
+  pthread_join(last,NULL);
   return 0;
 }
