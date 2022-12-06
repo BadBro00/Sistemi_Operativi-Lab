@@ -1,0 +1,46 @@
+Un forno per le pizze può cuocere M pistrelle contemporaneamente. N operai preparano le piastrelle da infornare, e K operai visionano le piastrelle all'uscita.
+Se gli operai all'uscita trovano una piastrella difettata, cominciano a prenderne due alla volta, altrimenti ne tirano fuori una alla volta.
+
+-----------------------------------------------------------------------------------------------------------------
+VARIABILI:
+
+max_piast : const int = M
+oper_piast : const int = N
+oper_forno : const int = K
+
+buffer : array[max_piast] = {...}
+
+cons_idx : int = 0
+prod_idx : int = 0
+piast_difett : int = 0
+
+mutex : mutex = 1
+forno_pieno : semaforo = 0
+forno_vuoto : semaforo = 1
+------------------------------------------------------------------------------------------------------------------
+PROCESSI:
+Operaio_Piastrelle(){
+  while(1){
+    wait(forno_vuoto)
+    lock(mutex)
+    buffer[prod_idx] := piastrella
+    prod_idx++
+    unlock(mutex)
+    signal(forno_vuoto)
+    if(prod_idx == M)
+      signal(forno_pieno)
+  }
+}
+Operaio_Forno(){
+  while(1){
+    wait(forno_pieno)
+    piast_difett := rand()%2
+    for i=1 to piast_difett {
+      lock(mutex)
+      buffer[cons_idx] := 0
+      cons_idx--
+      unlock(mutex)
+    }
+  }
+}
+      
