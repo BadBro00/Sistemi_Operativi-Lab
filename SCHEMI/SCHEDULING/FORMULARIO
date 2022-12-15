@@ -1,0 +1,27 @@
+---------------------------------------------|ATTESA|----------------------------------
+Tempo di Attesa (Tatt) : 
+                    
+                    Tcomp - Tarr - Tserv
+
+Tempo di Attesa Medio (Tattm):
+                    
+                    SUM( (Tcomp(i) - Tarr(i) - Tserv(i) )/Nproc ) = SUM( Tcomp(i)/Nproc )
+-----------------------------------------------|TURNAROUND|--------------------------------------
+
+Tempo di Turnaround (Tta):
+                    
+                    Tcomp - Tarr
+                    
+Tempo di Turnaround Medio (Ttam):
+
+                    SUM( (Tcomp(i) - Tarr(i)) /Nproc ) = SUM( (Tta(i)/Nproc )
+                    
+Tempo di Turnaround Normalizzato (TtaM):
+
+                    (com-Tarr)/CPUb
+                    
+----------------------------------------------|THROUGHPUT|---------------------------------------
+Throughput:
+  
+  
+                     Nproc/Tempo_fine_Ultimo_Proc
