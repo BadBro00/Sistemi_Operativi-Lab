@@ -1,0 +1,34 @@
+La politica di Scheduling Round Robin prevede di concedere l'utilizzo della CPU (e quindi fornire CPUburst) a ciascun processo, secondo una time-slice.
+La time-slice e' il periodo massimo di tempo in cui un processo puo' utilizzare la CPU, e viene chiamato quanto.
+Oltre cio', e' previsto un certo tempo per il Context Switch, ovvero il cambio di contesto di un processo,
+che va considerato come "quanti quadratini lasciare dalla fine del processo".
+
+La politica di Scheduling Shortest Job First seleziona il processo che richiede meno CPUb per essere schedulato.
+Questa politica favorisce i processi brevi, ma causa Starvation nei processi lunghi.
+
+                                   ||SCHEMA||
+           P           Tarr          Tserv 
+          P1            0              3
+          P2            2              3
+          P3            3              5
+          P4            4              2
+          P5            8              3
+          
+          
+In base a questa tabella, e considerando q = 1ms, abbiamo che:
+      
+      t = 0ms => P1 e' l'unico processo, e viene schedulato
+      t = 2ms => Arriva P2, avviene il CS
+      t = 3ms => P2 e' schedulato, e arriva P3
+      t = 4ms => Avviene il CS, arriva P4
+      t = 5ms => Viene schedulato P3
+      t = 6ms => Avviene il CS
+      t = 7ms => Viene schedulato P4
+      t = 8ms => Arriva P5, ed avviane il CS
+      t = 9ms => Viene schedulato P5
+      t = 10ms => Avviene il CS
+      t = 11ms => Viene schedulato P1
+      
+      .....
+      
+==============================FINE===========================      
