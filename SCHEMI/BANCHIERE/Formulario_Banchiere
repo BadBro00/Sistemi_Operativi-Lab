@@ -1,0 +1,81 @@
+Partendo dalla situazione:
+
+
+
+           Ris_Alloc                     Ris_Max               Ris_Disp
+         A   B   C   D                   A B C D               A B C D
+         ----------                     ---------              --------
+   P0    4  X-1  3   2                   6 4 5 6               2 2 10 4
+   P1    9   0  Y-2  2                   10 7 6 8
+   P2    4   0   0   0                   6 2 0 8
+   P3    0   0   3   2                   0 3 4 2
+   P4    2   1  Z+1  4                   9 1 6 9 
+
+
+Determinare gli intervalli di valori di X,Y e Z per cui:
+    1)E' determinata una sequenza sicura
+    2)La richiesta di P2(2,0,0,2) e' fattibile
+
+---------------------------------------------------------------------------------
+Abbiamo che:
+
+P0:
+    6-4<=2 : SI
+    4-(X-1)<=2 : SOLO SE {4-X+1 >=0 ; 4-X+1 <= 2} => {5-x >=0 ;  5-X<=2} => {X<=5;3-X<=0} => {X<=5;X>=3}
+    5-3<=10
+    6-2<=4
+    
+P1:
+    10-8<=2
+    7-0<=2 => PROCESSO NON SAFE
+    
+P2:
+    6-4<=2
+    2-0<=2
+    0-0<=10
+    8-0<=4 => PROCESSO NON SAFE
+    
+P3:
+    0-0<=2
+    3-0<=2 => PROCESSO NON SAFE
+    
+P4:
+    9-2<=2 => PROCESSO NON SAFE
+    
+    
+Dunque, l'unico processo safe e' P0, per X in [3,5].
+Fatto partire, termina rilasciando le seguenti risorse:
+    A: 4
+    B: 5 (Caso peggiore)
+    C: 3
+    D: 2
+    => Ris_Disp = [2,2,10,4] + [4,5,3,2]
+                = [6,7,13,6]
+                
+Imposto quindi la sequenza S: <P0>
+-----------------------------------------------------------------------------------------------------------------------------------------
+Il procedimento viene ripetuto finche' non otteniamo la sequenza:
+
+  S: <P0,P3,P2,P4,P1>
+  Con gli intervalli di X,Y,Z : [3,5] | [-11,5] | [-14,8]  (Al posto dei valori negativi si indica 0, poiche' non si possono allocare risorse negative)
+  
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+Per quanto riguarda la risorsa di P2:
+
+t = 0
+
+P2:
+    6-(4+2)<=2
+    2-(0+0)<=2
+    0-(0+0)<=10
+    8-(0+2)<=4 => NON FATTIBILE
+
+Dopo che P0 ha rilasciato le risorse:
+P2:
+    6-(4+2)<=6
+    2-(0+0)<=7
+    0-(0+0)<=13
+    8-(0+2)<=6 => FATTIBILE
+    
+Dunque P2 puo' vedersi accettata la richiesta dopo che P0 rilascia le risorse.    
