@@ -1,0 +1,27 @@
+La politica di scheduling Shortest Time to Go seleziona sempre il processo che richiede meno CPUb per essere completato.
+E' la versione preemptive del SJF, ed essendo preemptive, quando arriva un processo con CPUb minore, viene schedulato quest'ultimo.
+Ma, come lo SJF, favorisce i processi brevi, e causa Starvation in quelli lunghi.
+
+La politica di Scheduling Shortest Job First seleziona il processo che richiede meno CPUb per essere schedulato.
+Questa politica favorisce i processi brevi, ma causa Starvation nei processi lunghi.
+
+                                   ||SCHEMA||
+           P           Tarr          Tserv 
+          P1            0              3
+          P2            2              3
+          P3            3              5
+          P4            4              2
+          P5            8              3
+          
+          
+In base a questa tabella, abbiamo che:
+      
+      t = 0ms => Nel sistema e' presente solo P1 => Schedulato
+      t = 2ms => Arriva P2, ma richiede piu' tempo di CPUb per essere completato => P1 e' ancora schedulato.
+      t = 3ms => Arriva P3 e termina P1 => Dato che P3 richiede piu' tempo di CPUb, viene schedulato P2
+      t = 4ms => Arriva P4 => Richiede meno tempo di CPUb rispetto a P2 => Viene schedulato
+      t = 6ms => Termina P4 => Viene ri-schedulato P2
+      t = 8ms => Termina P2, ed arriva P5 => P5 richiede meno CPUb rispetto a P3 => Viene schedulato P5
+      t = 11ms => Termina P5 => L'unico processo e' P3 => Viene schedulato
+      t = 16ms => Termina P3
+=====================================FINE======================================      
