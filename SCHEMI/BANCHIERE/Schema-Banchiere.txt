@@ -1,0 +1,53 @@
+Il banchiere e' un esercizio semplice ma lungo, pieno di calcoli semplici ma noiosi.
+Il trucco per risolvere questo tipo di esercizio e' tenere bene a mente gli step da fare.
+------------------------------------------------------------------------------------------
+Abbiamo innanzitutto 3 matrici:
+
+        Ris_Alloc:
+              A  B  C  D
+              
+        Contiene il quantitativo di risorse, per ciascuna CLASSE (A,B,C,D) assegnate a ciascun processo
+        
+        Ris_Max:
+              A  B  C  D
+        
+        Contiene il MASSIMO quantitativo di risorse allocabili a ciascun processo, per ogni classe
+        
+        
+        Ris_Disp:
+              A  B  C  D
+        
+        Contiene il quantitativo delle risorse disponibili nel sistema ad ogni step
+------------------------------------------------------------------------------------------------------------------------------------------------------
+Abbiamo, infine, una richiesta AGGIUNTIVA da parte di un processo, presentata a parte nella forma:
+      Pi(X,Y,Z,K)
+      
+Questa richiesta dev'essere valutata se:
+      FATTIBILE - Se cioe' puo' essere autorizzata ad un certo istante t = T
+      Porta il sistema in uno stato SAFE - Se cioe' concedendo la richiesta, c'e' una sequenza S di processi per cui il sistema e' in uno stato sicuro
+------------------------------------------------------------------------------------------------------------------------------------------------------
+Gli step da seguire sono 3:
+
+1) Individuare i processi SAFE:
+      Questo punto viene svolto facilmente, mettendo a sistema le condizioni d'avvio di un processo per ogni classe di risorsa.
+      Ovvero, bisogna vedere se Ris_Max[i] - Ris_Alloc[i] <= Ris_Disp, per ciascuna classe.
+      [Solitamente l'esercizio del banchiere e' parametrizzato, quindi bisogna tenere conto dell'insieme dei valori del parametro per cui e' safe]
+      
+2) Controllare se l'allocazione delle risorse (quindi la run effettiva del processo) porti ad uno stato SAFE:
+      Questo punto e' noioso, vanno rifatti i calcoli dopo aver aumentato le risorse disponibili di quante sono allocate al processo che e' andato in run.
+      Se c'e' almeno un altro processo che puo' essere runnato, il sistema e' in uno stato SAFE.
+      
+      [Questo step viene svolto finche' non si terminano tutti i processi, cosi' da concludere l'esercizio]
+      [In caso non si riesca, si ripete il punto 1 cambiando Processo]
+      
+3) Controllare se la richiesta aggiuntiva di Pi e' fattibile:
+      Questo punto e' lo stesso del punto 1, ma bisogna prima fare due controlli:
+          i) Ris_Max[i] - (Ris_Alloc[i] + Richiesta[i]) <= Ris_Disp
+          ii) Ris_Max[i] - (Ris_Alloc[i] + Richiesta[i]) >= 0
+      Se queste due condizioni sono verificate, si puo' proseguire alla ricerca di uno stato safe.
+      
+      [Nel caso in cui la richiesta non sia fattibile a t=0, bisogna riprovare a t=T, quando un altro processo ha terminato e rilasciato risorse]
+      [Quest ultimo step viene ripetuto finche' non si trova un t per cui la richiesta e' fattibile, oppure terminano i processi e non e' fattibile]
+      
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+|Le formule sono riportate nel file "Formulario Banchiere"|
