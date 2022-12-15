@@ -1,0 +1,32 @@
+La politica di Scheduling Least Completed Next schedula sempre il processo che ha utilizzato il minor tempo di CPU (non quello che ha meno tempo per finire).
+In caso di uguaglianza, seleziona il processo non schedulato per piu' tempo.
+Anche questa politica causa la Starvation dei processi lunghi, ma fornisce uguali progressi per entrambi i tipi di Processi. 
+Infine, trascura i processi esistenti quando arriva un nuovo processo, che ha usato meno CPU, e per questo motivo anche i processi "medi" soffrono di Starvation.
+
+La politica di Scheduling Shortest Job First seleziona il processo che richiede meno CPUb per essere schedulato.
+Questa politica favorisce i processi brevi, ma causa Starvation nei processi lunghi.
+
+                                   ||SCHEMA||
+           P           Tarr          Tserv 
+          P1            0              3
+          P2            2              3
+          P3            3              5
+          P4            4              2
+          P5            8              3
+          
+          
+In base a questa tabella, abbiamo che:
+      
+      t = 0ms => Nel sistema e' presente solo P1 => Schedulato
+      t = 2ms => Arriva P2 => Viene schedulato
+      t = 3ms => Arriva P3 => Viene schedulato
+      t = 4ms => Arriva P4 => Viene schedulato
+      t = 6ms => Termina P4 => Viene schedulato P2 (P1 ha usato 2ms di CPU, P2 solo 1)
+      t = 7ms => Viene schedulato P3
+      t = 8ms => Arriva P5 => Viene schedulato
+      t = 10ms => Viene schedulato P1 che, a parita' di CPU usata, non viene schedulato da piu' tempo.
+      t = 11ms => Termina P1 => Viene schedulato P2
+      t = 12ms => Termina P2 => Viene schedulato P3
+      t = 13ms => Viene schedulato P5
+      t = 14ms => Termina P5 => Viene schedulato P3 fino a completamento (t=16ms)
+=====================================FINE======================================      
