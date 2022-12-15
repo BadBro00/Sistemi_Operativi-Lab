@@ -1,0 +1,5 @@
+Lo scheduling Highest Response Ratio Next e' una politica di Scheduling in cui viene sempre schedulato il processo che ha rapporto:
+                                              Rr = (Tatt+Tserv)/Tserv
+maggiore. Il rapporto viene sempre calcolato ad ogni CS, che essendo non preemptive la politica, si traduce in ogni conclusione del processo schedulato.
+
+
