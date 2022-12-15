@@ -1,0 +1,48 @@
+Schema del Produttore/Consumatore avendo N buffer, e non piu' quello singolo.
+I semafori full ed empty indicano il numero di buffer pieni e vuoti, quindi sono inizializzati a 0 ed n.
+Il nostro buffer diviene un array di buffer, e prod_ptr e cons_ptr diventano gli indici dell'array di buffer da usare.
+
+Il produttore aspetta che un buffer sia vuoto [wait(vuoto)], e in tal caso produce un elemento nel buffer buffer[prod_ptr].
+Completata l'operazione, effettua una [signal(pieno)], per segnalare che ha riempito un buffer, e poi "passa il turno" al consumatore.
+
+Il consumatore aspetta che un buffer sia pieno [wait(pieno)], e in tal caso consuma l'elemento del buffer buffer[cons_ptr].
+Completata l'operazione, aggiorna il puntatore al buffer, effettua una [signal(vuoto)], e "passa il turno" al produttore.
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+VARIABILI:
+
+dim : const int = N
+cons_ptr : int = 0
+prod_ptr : int = 0
+
+buffer : array[dim] of item = {...}
+
+full : semaforo = 0
+empty : semaforo = N
+
+mutex : mutex = 1
+-------------------------------------
+PROCESSI:
+
+Produttore(){
+  while(1){
+    wait(vuoto)
+    lock(mutex)
+    elemento := rand()%256
+    buffer[prod_ptr] := elemento
+    prod_ptr = prod_ptr + 1 mod(dim)
+    signal(pieno)
+    unlock(mutex)
+  }
+]
+
+Consumatore(){
+  while(1){
+    wait(pieno)
+    lock(mutex)
+    buffer[cons_ptr] = 0
+    cons_ptr = cons_ptr + 1 mod(dim)
+    signal(vuoto)
+    unlock(mutex)
+  }
+}
