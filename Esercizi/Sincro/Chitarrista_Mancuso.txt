@@ -1,0 +1,41 @@
+N chitarristi
+M modelli
+K chitarre per modello
+
+quando tutti gli allievi hanno chitarra, inizia masterclass
+
+quelli che rimangono appesi, faranno la successiva
+
+tutto termina quando non ci sono chitarristi in attesa
+
+---------------------------------------------------
+
+N const int
+M const int
+K const int
+
+int modello
+
+//sceltaChitarra[N] = {false,...};
+chitarre[M] = {K,K,...,K}
+
+posti_liberi : semaforo = N;
+
+mutex per CS
+----------------------------
+Chitarrista(){
+  wait(posti_liberi);
+  modello = rand()%M
+  lock(mutex)
+  if(chitarre[modello] >= 1){
+    chitarre[modello]--;
+  }else{
+    modello = modello + 1 mod M;
+  //while(sceltaChitarra=false){
+  //  modello=rand(0,M)
+  //  if(chitarra[modello]>0){
+  //    sceltaChitarra=true
+  //  }
+  //}
+  Attendi_Masterclass();
+  ----------------------------------------|AGGIUNGI PROCESSO COLLABORATORE|-------------------------------
