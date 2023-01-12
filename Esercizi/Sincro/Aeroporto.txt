@@ -1,0 +1,49 @@
+Si consideri il seguente problema:
+I passeggeri in transito in un aeroporto prima di imbarcarsi sull'aereo, devono superare i controlli di sicurezza.
+I controlli sono gestiti come segue:
+  Ogni passeggero sceglie tra N code quella più breve cui accodarsi ed attendere il proprio turno per passare il controllo.
+  Ogni coda è gestita da un addetto che lascia passare il primo passeggero della coda, indirizzandolo verso una delle M code di accesso al metal detector.
+  Ogni addetto indirizza il passeggero verso la coda più breve con lunghezza minore di K. 
+    Se il numero di code con lunghezza minore di K è inferiore a M/2, gli addetti non lasciano passare i passeggeri finchè persiste tale condizione.
+Dopo aver attraversato il metal detector, il passeggero si dirige all'imbarco.
+---------------------------------------------------------------------------------------------------------------------
+
+const int N code
+const int M code accesso
+const int K lunghezza
+const int minimo M/2
+
+semaforo pass_attesa = 0;
+semaforo tuno = 0;
+
+coda[N] = {0,...,0};
+coda_metal[M] = {0,...,0};
+
+scelta_coda : int;
+coda_accesso : int;
+------------------------------------
+Passeggero(){
+  signal(pass_attesa);
+  lock(mutex)
+  scelta_coda = trova_min(coda); //Restituisce idx coda con lunghezza minore
+  coda[scelta_coda]++;
+  unlock(mutex);
+  wait(turno);
+  coda_metal[coda_accesso]++;
+  Passa_Detector();
+  wait(pass_attesa);
+  Imbarca();
+}
+Addetto(){
+  while(pass_attesa > 0){
+  lock(mutex);
+    do{
+      signal(turno);
+      coda[scelta_coda]--;
+    }while( sum(coda_metal,K) >= M/2 );
+    unlock(mutex);
+    lock(mutex);
+    coda_accesso = trova_min_coda(coda_metal,K);
+    unlock(mutex);
+  }
+}
