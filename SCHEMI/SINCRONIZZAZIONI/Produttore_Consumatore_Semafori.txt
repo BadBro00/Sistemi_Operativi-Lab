@@ -1,0 +1,62 @@
+                    |Single Buffer (Array[0])|
+------------------------------------------------------
+type item = ...;
+
+var
+
+  full : semaphore := 0; (Inizializations)
+  empty : semaphore := 1;
+  buffer : array[0] of item;
+
+//Producer                        //Consumer
+begin
+Parbegin                          Parbegin
+  repeat                            repeat
+    wait(empty);                      wait(full);
+    buffer[0] = ...;                  x := buffer[0];
+    (i.e. produce)                    (i.e. consume)
+    signal(full);                     signal(empty);
+    //Rest of cycle                   //Rest of cycle 
+  forever                           forever
+Parend                            Parend
+end;
+
+---------------------------------------------------------
+                      |n-buffer (Array[n])|
+const n : ...;
+type item : ...;
+
+var
+
+  buffer : array[0,...,n-1] of item;
+  full : semaphore := 0; (Initializations)
+  empty : semaphore := 1;
+  prod_ptr,cons_ptr : integer;
+  
+begin
+  prod_ptr := 0;
+  cons_ptr := 0;
+
+//Producer                              //Consumer
+Parbegin                                Parbegin
+  repeat                                  repeat
+    wait(empty);                            wait(full);
+    buffer[prod_cons] := ...;               x := buffer[cons_ptr]
+    (i.e. produce)                          (i.e. consume)
+    prod_ptr = prod_ptr + 1 mod n;          cons_ptr = cons_ptr + 1 mod n;
+    signal(full);                           signal(empty);
+    //Rest of cycle                         //Rest of cycle
+  forever                                 forever
+Parend                                  Parend
+end;
+----------------------------------------------------------------------
+                          |SPIEGAZIONI|
+Il produttore aspetta un buffer vuoto con una wait(vuoto).
+Quando sono disponibili buffer vuoti, inserisce un elemento nel buffer e aggiorna l'indice prod_ptr.
+Dopo aver completato l'operazione di inserimento effettua una signal(pieno) per permettere al consumatore di entrare nella sua sezione critica.
+
+Il consumatore aspetta un buffer pieno con una wait(pieno).
+Quando sono disponibili buffer pieni, estrae un elemento dal buffer e aggiorna l'indice cons_ptr.
+Dopo aver completato l'operazione di estrazione effettua un signal(vuoto) per permettere al produttore di entrare nella sua sezione critica.
+-----------------------------------------------------------------------
+Il livello di concorrenza in questo algoritmo è 1, a volte viene eseguito un produttore, altre volte viene eseguito un consumatore.
