@@ -1,0 +1,40 @@
+                                    |Priorita' ai Lettori|
+                                        (Pseudocodice)
+----------------------------------------------------------------------------------------------------
+//Lettore                                       //Scrittore
+Parbegin                                        Parbegin
+  repeat                                          repeat
+    if a writer is writing                          if reader(s) are waiting, or a writer is writing
+      then                                            then
+        wait;                                           wait;
+    read;                                           write;
+    if no other reader is reading                   if reader(s) or writer(s) are waiting
+      then                                            then
+        if writer(s) are waiting                        activate either one writer or all readers
+          then
+            activate one waiting writer
+  forever                                         forever
+Parend                                          Parend
+end;
+
+----------------------------------------------------------------------------------------------------
+                                          (Codice)
+var
+  runread,runwrite,totread,totwrite : integer;
+  reading,writing : semaphore := 0;
+  sem_CS : semaphore := 1;
+  
+begin
+  runread := 0;
+  totread := 0;
+  runwrite := 0;
+  totwrite := 0;
+  
+//Lettore                                           //Scrittore
+Parbegin
+  repeat
+    wait(sem_CS);
+    totread = totread + 1;
+    if (runwrite = 0) then
+      runread = runread + 1;
+      signal(reading);
